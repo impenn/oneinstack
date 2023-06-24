@@ -57,6 +57,7 @@ Show_Help() {
                               sourceguardian,imagick,gmagick,fileinfo,imap,ldap,calendar,phalcon,
                               yaf,yar,redis,memcached,memcache,mongodb,swoole,xdebug
   --nodejs                    Install Nodejs
+  --golang                    Install GoLang
   --tomcat_option [1-4]       Install Tomcat version
   --jdk_option [1-3]          Install JDK version
   --db_option [1-14]          Install DB version
@@ -73,7 +74,7 @@ Show_Help() {
   "
 }
 ARG_NUM=$#
-TEMP=`getopt -o hvV --long help,version,nginx_option:,apache,apache_mode_option:,apache_mpm_option:,php_option:,mphp_ver:,mphp_addons,phpcache_option:,php_extensions:,nodejs,tomcat_option:,jdk_option:,db_option:,dbrootpwd:,dbinstallmethod:,pureftpd,redis,memcached,phpmyadmin,python,ssh_port:,firewall,reboot -- "$@" 2>/dev/null`
+TEMP=`getopt -o hvV --long help,version,nginx_option:,apache,apache_mode_option:,apache_mpm_option:,php_option:,mphp_ver:,mphp_addons,phpcache_option:,php_extensions:,nodejs,golang,tomcat_option:,jdk_option:,db_option:,dbrootpwd:,dbinstallmethod:,pureftpd,redis,memcached,phpmyadmin,python,ssh_port:,firewall,reboot -- "$@" 2>/dev/null`
 [ $? != 0 ] && echo "${CWARNING}ERROR: unknown argument! ${CEND}" && Show_Help && exit 1
 eval set -- "${TEMP}"
 while :; do
@@ -143,6 +144,10 @@ while :; do
     --nodejs)
       nodejs_flag=y; shift 1
       [ -e "${nodejs_install_dir}/bin/node" ] && { echo "${CWARNING}Nodejs already installed! ${CEND}"; unset nodejs_flag; }
+      ;;
+    --golang)
+      golang_flag=y; shift 1
+      [ -e "${golang_install_dir}/bin/go" ] && { echo "${CWARNING}Golang already installed! ${CEND}"; unset golang_flag; }
       ;;
     --tomcat_option)
       tomcat_option=$2; shift 2
@@ -658,6 +663,17 @@ if [ ${ARG_NUM} == 0 ]; then
     fi
   done
 
+  # check Golang
+  while :; do echo
+    read -e -p "Do you want to install Golang? [y/n]: " golang_flag
+    if [[ ! ${golang_flag} =~ ^[y,n]$ ]]; then
+      echo "${CWARNING}input error! Please only input 'y' or 'n'${CEND}"
+    else
+      [ "${golang_flag}" == 'y' -a -e "${golang_install_dir}/bin/go" ] && { echo "${CWARNING}Golang already installed! ${CEND}"; unset golang_flag; }
+      break
+    fi
+  done
+
   # check Pureftpd
   while :; do echo
     read -e -p "Do you want to install Pure-FTPd? [y/n]: " pureftpd_flag
@@ -1091,6 +1107,12 @@ esac
 if [ "${nodejs_flag}" == 'y' ]; then
   . include/nodejs.sh
   Install_Nodejs 2>&1 | tee -a ${oneinstack_dir}/install.log
+fi
+
+# Golang
+if [ "${golang_flag}" == 'y' ]; then
+  . include/golang.sh
+  Install_Golang 2>&1 | tee -a ${oneinstack_dir}/install.log
 fi
 
 # Pure-FTPd

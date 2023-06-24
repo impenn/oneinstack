@@ -50,6 +50,7 @@ Show_Help() {
   --phpmyadmin                  Uninstall phpMyAdmin
   --python                      Uninstall Python (PATH: ${python_install_dir})
   --node                        Uninstall Nodejs (PATH: ${nodejs_install_dir})
+  --golang                      Uninstall Golang (PATH: ${golang_install_dir})
   "
 }
 
@@ -131,6 +132,9 @@ while :; do
       ;;
     --node)
       nodejs_flag=y; shift 1
+      ;;
+    --golang)
+      golang_flag=y; shift 1
       ;;
     --pureftpd)
       pureftpd_flag=y; shift 1
@@ -572,6 +576,11 @@ Print_Nodejs() {
   [ -e "/etc/profile.d/nodejs.sh" ] && echo /etc/profile.d/nodejs.sh
 }
 
+Print_Golang() {
+  [ -e "${golang_install_dir}" ] && echo ${golang_install_dir}
+  [ -e "/etc/profile.d/golang.sh" ] && echo /etc/profile.d/golang.sh
+}
+
 Menu() {
 while :; do
   printf "
@@ -590,6 +599,7 @@ What Are You Doing?
 \t${CMSG}11${CEND}. Uninstall phpMyAdmin
 \t${CMSG}12${CEND}. Uninstall Python (PATH: ${python_install_dir})
 \t${CMSG}13${CEND}. Uninstall Nodejs (PATH: ${nodejs_install_dir})
+\t${CMSG}14${CEND}. Uninstall Golang (PATH: ${golang_install_dir})
 \t${CMSG} q${CEND}. Exit
 "
   echo
@@ -612,6 +622,7 @@ What Are You Doing?
       Print_phpMyAdmin
       Print_Python
       Print_Nodejs
+      Print_Golang
       Uninstall_status
       if [ "${uninstall_flag}" == 'y' ]; then
         Uninstall_Web
@@ -626,6 +637,7 @@ What Are You Doing?
         Uninstall_phpMyAdmin
         . include/python.sh; Uninstall_Python
         . include/nodejs.sh; Uninstall_Nodejs
+        . include/golang.sh; Uninstall_Golang
       else
         exit
       fi
@@ -698,6 +710,11 @@ What Are You Doing?
       Uninstall_status
       [ "${uninstall_flag}" == 'y' ] && { . include/nodejs.sh; Uninstall_Nodejs; } || exit
       ;;
+    14)
+      Print_Golang
+      Uninstall_status
+      [ "${uninstall_flag}" == 'y' ] && { . include/golang.sh; Uninstall_Golang; } || exit
+      ;;
     q)
       exit
       ;;
@@ -725,6 +742,7 @@ else
   [ "${phpmyadmin_flag}" == 'y' ] && Print_phpMyAdmin
   [ "${python_flag}" == 'y' ] && Print_Python
   [ "${nodejs_flag}" == 'y' ] && Print_Nodejs
+  [ "${golang_flag}" == 'y' ] && Print_Golang
   [ "${all_flag}" == 'y' ] && Print_openssl
   Uninstall_status
   if [ "${uninstall_flag}" == 'y' ]; then
@@ -748,6 +766,7 @@ else
     [ "${phpmyadmin_flag}" == 'y' ] && Uninstall_phpMyAdmin
     [ "${python_flag}" == 'y' ] && { . include/python.sh; Uninstall_Python; }
     [ "${nodejs_flag}" == 'y' ] && { . include/nodejs.sh; Uninstall_Nodejs; }
+    [ "${golang_flag}" == 'y' ] && { . include/golang.sh; Uninstall_Golang; }
     [ "${all_flag}" == 'y' ] && Uninstall_openssl
   fi
 fi

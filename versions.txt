@@ -33,7 +33,7 @@ percona57_ver=5.7.42-45
 percona56_ver=5.6.51-91.0
 percona55_ver=5.5.62-38.14
 
-pgsql_ver=12.7
+pgsql_ver=15.3
 
 mongodb_ver=4.0.26
 
@@ -52,7 +52,8 @@ php81_ver=8.1.20
 php82_ver=8.2.7
 
 # Nodejs
-nodejs_ver=18.14.2
+#nodejs_ver=18.16.1
+nodejs_ver=16.20.1
 
 libiconv_ver=1.16
 curl_ver=7.88.1
@@ -128,3 +129,8 @@ python_ver=3.6.15
 setuptools_ver=61.2.0
 pip_ver=22.0.4
 fail2ban_ver=0.11.2
+
+# devl
+#golang_ver=1.18.10
+golang_ver=1.20.5
+timescaledb_ver=2.11.0
