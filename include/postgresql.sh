@@ -15,7 +15,7 @@ Install_PostgreSQL() {
   mkdir -p ${pgsql_data_dir};chown postgres.postgres -R ${pgsql_data_dir}
   tar xzf postgresql-${pgsql_ver}.tar.gz
   pushd postgresql-${pgsql_ver}
-  ./configure --prefix=$pgsql_install_dir
+  ./configure --prefix=$pgsql_install_dir --with-openssl
   make -j ${THREAD}
   make install
   chmod 755 ${pgsql_install_dir}
