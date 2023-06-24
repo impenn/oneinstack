@@ -1,0 +1,27 @@
+[Unit]
+Description=Thingspanel server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+ExecStart=/bin/sh /usr/local/thingspanel/bin/thingspanel start
+User=root
+Group=root
+Environment=HOME=/usr/local/thingspanel
+KillMode=mixed
+KillSignal=SIGINT
+TimeoutSec=300
+OOMScoreAdjust=-1000
+TimeoutStopSec=1000000s
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+TimeoutStartSec=150
+StandardOutput=null
+Restart=always
+StartLimitBurst=3
+StartLimitInterval=60s
+
+[Install]
+WantedBy=multi-user.target

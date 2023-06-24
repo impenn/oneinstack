@@ -1,0 +1,17 @@
+[Unit]
+Description=gmqtt server
+Documentation=https://github.com/ThingsPanel/gmqtt
+After=network.target
+
+[Service]
+Type=simple
+PIDFile=/var/run/gmqtt.pid
+ExecStart=/usr/local/gmqtt/gmqttd start -c /usr/local/gmqtt/gmqtt.yml
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID
+LimitNOFILE=1000000
+LimitNPROC=1000000
+LimitCORE=1000000
+
+[Install]
+WantedBy=multi-user.target
